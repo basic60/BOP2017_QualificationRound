@@ -1,8 +1,8 @@
-import jieba
+import jieba.posseg as posseg
 from .query.qthing import *
 from .query.definations import *
+from .query.qnoise import *
 
-_noise=['吗', '啊', '请问', '哦']
 def query_intent(query):
     def _add(s):
         nonlocal possible_intent
@@ -10,13 +10,24 @@ def query_intent(query):
             possible_intent[s] += 1
         else:
             possible_intent[s] = 1
-    word_list=jieba.cut(query)              # 句子分词后的各个部分
+
+    word_list=posseg.cut(query)              # 句子分词后的各个部分
     wclass_list=[]                          # 各个词的词性
     possible_intent={}
-    for i in word_list:
-        if isqthing(i):
+    ret={}
+    for ii in word_list:
+        wd=ii.word
+        i=ii.flag
+
+        print(wd+"===")
+        if isqthing(wd):
             _add(QueryType.thing)
             wclass_list.append(WordType.thing)
-        elif i in _noise:
+            ret[wd] = WordType.thing
+        elif isnoise(i):
             wclass_list.append(WordType.noise)
-    return possible_intent,dict(zip(word_list,wclass_list))
+            ret[wd] = WordType.noise
+        else:
+            wclass_list.append(WordType.noun)
+            ret[wd] = WordType.noun
+    return possible_intent,ret

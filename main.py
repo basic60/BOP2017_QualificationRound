@@ -1,8 +1,9 @@
 import jieba
+import jieba.posseg as posseg
 import amadeus.match as match
 
 def calculate_relevancy(pattern,target):
-    return match(pattern,target)
+    return match.match(pattern,target)
 
 def find_max(tmp):
     pos=-1
@@ -37,9 +38,11 @@ def test_process(ifile):
                   "\n\033[33;0mThe wrong pos is:<<< " + str(posmy) +
                   " >>> Wrong Sentence:" + article_list[posmy] + "Calculated Relativity:" + str(relmy) + "\n"+
                   "\033[32;0mThe correct pos is:<<< " +str(posans) +
-                  " >>> Correct Sentence: "+article_list[posans],end='')
+                  " >>> Correct Sentence: "+article_list[posans],end='\033[34;0m')
+            print(my_list)
             print("\033[1;31;0m======================================="
                   "============================================\033[0m")
+
         last = que
         tot_num += 1
         ans_list.clear()
@@ -63,8 +66,8 @@ def test_process(ifile):
     print("Total "+str(ac_num)+" correct answers.\n"+"The correct rate is "+str(ac_num/tot_num))
 
 if __name__ == '__main__':
-    t={1:2,'r':6}
-    for i in t:
-        print(i,t[i])
-    #ifs = open('dev.txt', encoding='UTF-8')
-    #test_process(ifs)
+  #  asd=posseg.cut("这由什么组成？这是哪里")
+   # for j in asd:
+    #    print(j.word,j.flag,type(j.flag))
+    ifs = open('dev.txt', encoding='UTF-8')
+    test_process(ifs)
