@@ -32,6 +32,8 @@ def test_process(ifile):
         posans, relans = find_max(ans_list)
         posmy, relmy = find_max(my_list)
         if posans == posmy:
+            print("\033[34;0mNo."+str(tot_num+1)+" is correct.The sequence:")
+            print(my_list)
             ac_num += 1
         else:
             print("\033[1;31;0mIncorrect answer:\033[36;0m\nThe question is: " + last +
@@ -63,11 +65,11 @@ def test_process(ifile):
         if limit>19:
             break
     check()
-    print("Total "+str(ac_num)+" correct answers.\n"+"The correct rate is "+str(ac_num/tot_num))
+    print("\033[1;31;0mTotal "+str(ac_num)+" correct answers.\n"+"The correct rate is "+str(ac_num/tot_num))
 
 if __name__ == '__main__':
-  #  asd=posseg.cut("这由什么组成？这是哪里")
-   # for j in asd:
-    #    print(j.word,j.flag,type(j.flag))
-    ifs = open('dev.txt', encoding='UTF-8')
-    test_process(ifs)
+   #t=jieba.posseg.cut('香港会议展览中心会展2期在2016年2月成立')
+   #for i in t:
+   #    print(i)
+   ifs = open('dev.txt', encoding='UTF-8')
+   test_process(ifs)
