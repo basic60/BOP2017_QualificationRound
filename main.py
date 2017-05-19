@@ -71,5 +71,6 @@ if __name__ == '__main__':
    #t=jieba.posseg.cut('香港会议展览中心会展2期在2016年2月成立')
    #for i in t:
    #    print(i)
+
    ifs = open('dev.txt', encoding='UTF-8')
    test_process(ifs)
