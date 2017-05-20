@@ -5,20 +5,17 @@ from .query.qtime import *
 from .query.qthing import *
 
 _last_query='---'
-_query_posres=''
 _important_noun=[]
 _word_list=[]
 _clist=[]
-def init_query(query):
-    global _last_query,_query_posres,_word_list,_clist,_important_noun
-    _query_posres = posseg.cut(query)
+def init_query(query):                                                          #初始化查询语句
+    global _last_query,_word_list,_clist,_important_noun
     if query!=_last_query:
         _last_query=query
+        _query_posres = [(i.word, i.flag) for i in posseg.cut(query)]
         for i in _query_posres:
-            wd=i.word
-            fg=i.flag
-            _word_list.append(wd)
-            _clist.append(fg)
+            _word_list.append(i[0])
+            _clist.append(i[1])
 
         _important_noun=[0 for i in range(len(_word_list))]
         for i in range(len(_word_list)):
@@ -50,11 +47,11 @@ def match(query,target):
         type_value=jieba_converter(fg)
 
         if type_value==WordType.location_name and wd in target and location_add==0:
-            # print("location same: "+wd)
+            print("location same: "+wd)
             ret+=1                                                              # 地点匹配加1,只加一次
             location_add=1
         elif type_value==WordType.noun and wd in target:
-            # print("noun same>>> "+wd+"  val: "+str(_important_noun[cnt]))
+            print("noun same>>> "+wd+"  val: "+str(_important_noun[cnt]))
             ret+= _important_noun[cnt]                                          # 关键名词匹配
         else:
             pass
@@ -65,7 +62,9 @@ def match(query,target):
                 wd2=j.word
                 fg2=j.flag
                 type_value_2=jieba_converter(fg2)
-                if type_value_2==WordType.time:
-                    ret+=1                                                      # 查询时间意图匹配
+                if type_value_2==WordType.number and hastime(wd2):
+                    ret+=2                                                      # 查询时间意图匹配
+                    print("time: "+wd2)
                     break
+    print(target)
     return ret

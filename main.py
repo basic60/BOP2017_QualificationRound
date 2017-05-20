@@ -1,14 +1,15 @@
 import jieba
 import jieba.posseg as posseg
+import jieba.analyse
 import amadeus.match as match
 
 def calculate_relevancy(pattern,target):
     return match.match(pattern,target)
 
-def find_max(tmp):
+def find_max(tmp):                      # 寻找答案序列中最大值的位置。
     pos=-1
     maxx=-1
-    index=0
+    index=-1
     for i in tmp:
         index+=1
         if i>maxx:
@@ -17,7 +18,6 @@ def find_max(tmp):
     return pos,maxx
 
 def test_process(ifile):
-    data=ifile.readlines()              # 文件以List形式逐行读取到data。
     limit=0                             # 读取行数的数目，以方便测试。
     last=""                             # 上一个问题。
 
@@ -31,6 +31,7 @@ def test_process(ifile):
         nonlocal ac_num,tot_num,last,ans_list,my_list,article_list
         posans, relans = find_max(ans_list)
         posmy, relmy = find_max(my_list)
+
         if posans == posmy:
             print("\033[34;0mNo."+str(tot_num+1)+" is correct.The sequence:")
             print(my_list)
@@ -51,7 +52,7 @@ def test_process(ifile):
         my_list.clear()
         article_list.clear()
 
-    for i in data:
+    for i in ifile.readlines():
         limit+=1
         ans,que,sen=i.split('\t')       # ans,que,sen分别代表匹配程度，问题和句子内容。
         ans=int(ans)
@@ -62,15 +63,16 @@ def test_process(ifile):
         ans_list.append(ans)
         my_list.append(calculate_relevancy(que,sen))
 
-        if limit>19:
+        if limit>39:
             break
     check()
     print("\033[1;31;0mTotal "+str(ac_num)+" correct answers.\n"+"The correct rate is "+str(ac_num/tot_num))
 
 if __name__ == '__main__':
-   #t=jieba.posseg.cut('香港会议展览中心会展2期在2016年2月成立')
-   #for i in t:
-   #    print(i)
-
-   ifs = open('dev.txt', encoding='UTF-8')
-   test_process(ifs)
+    #t=jieba.posseg.cut('北洋大学最初是什么时候、由谁提出创建的？')
+    #s=jieba.analyse.extract_tags('1887年，英籍德人德璀琳（Gustav Derting）召集外国商人，要求赞助投资创办大学并得到响应。')
+    #d=[(i.word,i.flag) for i in t]
+    #for i in d:
+    #    print(i[0],i[1])
+    ifs = open('dev.txt', encoding='UTF-8')
+    test_process(ifs)
