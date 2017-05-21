@@ -2,9 +2,11 @@ import jieba
 import jieba.posseg as posseg
 import jieba.analyse
 import amadeus.match as match
+import amadeus.wordrank
 
 def calculate_relevancy(pattern,target):
-    return match.match(pattern,target)
+    return amadeus.wordrank.brute_force(pattern,target)
+    # return match.match(pattern,target)
 
 def find_max(tmp):                      # 寻找答案序列中最大值的位置。
     pos=-1
@@ -37,20 +39,22 @@ def test_process(ifile):
             print(my_list)
             ac_num += 1
         else:
+        #    pass
             print("\033[1;31;0mIncorrect answer:\033[36;0m\nThe question is: " + last +
                   "\n\033[33;0mThe wrong pos is:<<< " + str(posmy) +
                   " >>> Wrong Sentence:" + article_list[posmy] + "Calculated Relativity:" + str(relmy) + "\n"+
                   "\033[32;0mThe correct pos is:<<< " +str(posans) +
                   " >>> Correct Sentence: "+article_list[posans],end='\033[34;0m')
+
             print(my_list)
             print("\033[1;31;0m======================================="
                   "============================================\033[0m")
 
         last = que
         tot_num += 1
-        ans_list.clear()
-        my_list.clear()
-        article_list.clear()
+        ans_list=[]
+        my_list=[]
+        article_list=[]
 
     for i in ifile.readlines():
         limit+=1
@@ -69,10 +73,8 @@ def test_process(ifile):
     print("\033[1;31;0mTotal "+str(ac_num)+" correct answers.\n"+"The correct rate is "+str(ac_num/tot_num))
 
 if __name__ == '__main__':
-    #t=jieba.posseg.cut('北洋大学最初是什么时候、由谁提出创建的？')
-    #s=jieba.analyse.extract_tags('1887年，英籍德人德璀琳（Gustav Derting）召集外国商人，要求赞助投资创办大学并得到响应。')
-    #d=[(i.word,i.flag) for i in t]
-    #for i in d:
-    #    print(i[0],i[1])
+    # t=jieba.analyse.extract_tags('中西区圣安多尼学校是什么时候成立了校友会？')
+    # for i in t:
+    #    print(i)
     ifs = open('dev.txt', encoding='UTF-8')
     test_process(ifs)
