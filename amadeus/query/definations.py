@@ -27,8 +27,8 @@ _jieba_to_buildin_dic={'a':WordType.adj,'r':WordType.pronoun,'m':WordType.number
                        'p':WordType.pronoun,'v':WordType.verb,'n':WordType.noun,'ns':WordType.location_name,
                       'c':WordType.conjunction,'t':WordType.time}
 
-def jieba_converter(s):
-    if s in _jieba_to_buildin_dic:
-        return _jieba_to_buildin_dic[s]
+def jieba_converter(clistvalue):
+    if clistvalue in _jieba_to_buildin_dic:
+        return _jieba_to_buildin_dic[clistvalue]
     else:
         return 0

@@ -4,8 +4,7 @@ import jieba.analyse
 import amadeus.match as match
 
 def calculate_relevancy(pattern,target):
-    # return amadeus.wordrank.brute_force(pattern,target)
-     return match.match(pattern,target)
+    return match.match(pattern,target)
 
 def find_max(tmp):                      # 寻找答案序列中最大值的位置。
     pos=-1
@@ -34,12 +33,10 @@ def test_process(ifile):
         posmy, relmy = find_max(my_list)
 
         if posans == posmy:
-            #print("\033[34;0mNo."+str(tot_num+1)+" is correct.The sequence:")
-            #print(my_list)
+            print("\033[34;0mNo."+str(tot_num+1)+" is correct.The sequence:")
+            print(my_list)
             ac_num += 1
         else:
-            pass
-            '''
             print("\033[1;31;0mIncorrect answer:\033[36;0m\nThe question is: " + last +
                   "\n\033[33;0mThe wrong pos is:<<< " + str(posmy) +
                   " >>> Wrong Sentence:" + article_list[posmy] + "Calculated Relativity:" + str(relmy) + "\n"+
@@ -49,7 +46,7 @@ def test_process(ifile):
             print(my_list)
             print("\033[1;31;0m======================================="
                   "============================================\033[0m")
-            '''
+
 
         last = que
         tot_num += 1
@@ -68,14 +65,15 @@ def test_process(ifile):
         ans_list.append(ans)
         my_list.append(calculate_relevancy(que,sen))
 
-        if limit>1000:
+        if limit>10000:
             break
     check()
     print("\033[1;31;0mTotal "+str(ac_num)+" correct answers.\n"+"The correct rate is "+str(ac_num/tot_num))
 
 if __name__ == '__main__':
-     t=jieba.analyse.extract_tags('基督教香港信义会信义中学在哪儿')
-     for i in t:
-        print(i)
-    # ifs = open('dev.txt', encoding='UTF-8')
-    # test_process(ifs)
+    # t=jieba.posseg.cut('1935年，得到广东省教育厅批准立案，定名')
+    # for i in t:
+    # print(i)
+    ifs = open('dev.txt', encoding='UTF-8')
+    jieba.load_userdict('dic.txt')
+    test_process(ifs)
