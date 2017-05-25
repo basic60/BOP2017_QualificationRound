@@ -33,19 +33,20 @@ def test_process(ifile):
         posmy, relmy = find_max(my_list)
 
         if posans == posmy:
-            print("\033[34;0mNo."+str(tot_num+1)+" is correct.The sequence:")
-            print(my_list)
+            # print("\033[34;0mNo."+str(tot_num+1)+" is correct.The sequence:")
+            # print(my_list)
             ac_num += 1
         else:
-            print("\033[1;31;0mIncorrect answer:\033[36;0m\nThe question is: " + last +
-                  "\n\033[33;0mThe wrong pos is:<<< " + str(posmy) +
-                  " >>> Wrong Sentence:" + article_list[posmy] + "Calculated Relativity:" + str(relmy) + "\n"+
-                  "\033[32;0mThe correct pos is:<<< " +str(posans) +
-                  " >>> Correct Sentence: "+article_list[posans],end='\033[34;0m')
+            pass
+            # print("\033[1;31;0mIncorrect answer:\033[36;0m\nThe question is: " + last +
+            #      "\n\033[33;0mThe wrong pos is:<<< " + str(posmy) +
+            #      " >>> Wrong Sentence:" + article_list[posmy] + "Calculated Relativity:" + str(relmy) + "\n"+
+            #      "\033[32;0mThe correct pos is:<<< " +str(posans) +
+            #      " >>> Correct Sentence: "+article_list[posans],end='\033[34;0m')
 
-            print(my_list)
-            print("\033[1;31;0m======================================="
-                  "============================================\033[0m")
+            # print(my_list)
+            # print("\033[1;31;0m======================================="
+            #      "============================================\033[0m")
 
 
         last = que
