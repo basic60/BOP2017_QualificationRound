@@ -4,6 +4,7 @@ from .query.definations import *
 from .word.synonyms import *
 from .query.qtime import *
 from .query.qreason import *
+from .query.qlocation import *
 
 _last_query=''              # 最新的查询，防止多次初始化一句询问
 _importance=[]              # 单词权重
@@ -29,7 +30,7 @@ def init_query(query):                                              # 初始化�
         _keyword=analyse.extract_tags(query)                        # 使用TF-IDF算法获取关键词
         _importance = [0 for i in range(len(_word_list))]           # 初始化权重列表
 
-def match(query,target):
+def match(query,target,debug=False):
     init_query(query)
     location_add=False                           # 是否产生地点匹配
     time_add=False                               # 是否产生时间查询
@@ -54,14 +55,17 @@ def match(query,target):
                 if type_value_2==WordType.number and hastime(j):
                     ret+=2                              # 查询时间意图匹配
                     time_add=True                       # 只匹配一次
-                    # print('time correct')
+                    if debug: print('time correct')
                     break
-       # elif not reason_add and isqreason(wd) and hasanswer(query):         # 处理原因查询
-       #     ret+=5
-        #    reason_add=True
-        elif not location_add and type_value==WordType.location_name and wd in target:
-            ret+=1                                                              # 地点匹配加1,只加一次
-            location_add=True
+        elif not reason_add and isqreason(wd) and hasanswer(query):         # 处理原因查询
+            ret+=5
+            reason_add=True
+        elif not location_add and isqlocation(wd):
+            for j in article_clist:
+                if jieba_converter(j)==WordType.location_name:
+                    ret+=5
+                    location_add=True
+                    break
         elif type_value==WordType.noun:                 # 处理名词匹配
             if wd in target:                            # 直接向等
                 tval=1
@@ -79,32 +83,32 @@ def match(query,target):
                 for j in _keyword:
                     if j==tword:
                         ret+=rank*tval                  # 名词匹配
-                        # print(wd,'>>>>>noun correct')
+                        if debug: print(wd,'>>>>>noun correct')
                         break
                     rank-=0.2
                     if rank<=0: rank=0.2
-        elif type_value==WordType.verb and wd!='是' and wd!='有':    # 处理动词匹配
+        elif type_value==WordType.verb and wd!='是' and wd!='有' and wd!='会':    # 处理动词匹配
             samev=False
             for k in range(i):
-                if jieba_converter(_clist[k])==WordType.verb and is_synonyms(wd,_word_list[k]):
+                if jieba_converter(_clist[k])==WordType.verb and is_synonyms(wd,_word_list[k])>=0.5:
                     samev=True
                     break
             if samev: continue
+
             if wd in target:                            # 直接相等
-                # print(wd+" ===> verb correct")
+                if debug: print(wd+" ===> verb same")
                 ret+=5
             else:
                 cnt=-1
-                tval=0
                 for j in article_word:
                     cnt+=1
-                    if jieba_converter(article_clist[cnt])==WordType.verb and is_synonyms(wd,j):
-                        tval=0.9
-                        # print(wd + " ===> s_verb correct")
+                    if jieba_converter(article_clist[cnt])==WordType.verb:
+                        tmp=is_synonyms(wd,j)
+                        if tmp>0.8:
+                            ret+=5*tmp
+                        if debug: print(wd + " ===> s_verb correct")
                         break
-                if tval!=0:
-                    ret+=5*tval                         # 动词匹配
-    # print(target)
+    if debug: print(target)
     return ret
 
 

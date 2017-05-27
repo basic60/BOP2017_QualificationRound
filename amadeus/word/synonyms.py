@@ -1,6 +1,8 @@
+import gensim
+model = gensim.models.Word2Vec.load('word2vec_wx')
 def is_synonyms(s1,s2):
-    for i in range(len(s1)):
-        for j in range(len(s2)):
-            if s1[i]==s2[j]:
-                return True
-    return False
+    try:
+        return model.similarity(s1,s2)
+    finally:
+        return 0
+
