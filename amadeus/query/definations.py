@@ -15,7 +15,7 @@ class WordType:
     time=8           # 时间词，比如“早上”
     location_name=9  # 地名
     conjunction=10   # 连词，比如“和”
-
+    personname=11    # 人名
 
     qthing=4
     qlocation=5
@@ -23,9 +23,10 @@ class WordType:
     qreason=8
 
 
-_jieba_to_buildin_dic={'a':WordType.adj,'r':WordType.pronoun,'m':WordType.number,'x':WordType.noise,
-                       'p':WordType.pronoun,'v':WordType.verb,'n':WordType.noun,'ns':WordType.location_name,
-                      'c':WordType.conjunction,'t':WordType.time}
+_jieba_to_buildin_dic= {'a': WordType.adj, 'r': WordType.pronoun, 'm': WordType.number, 'x': WordType.noise,
+                        'p': WordType.pronoun, 'v': WordType.verb, 'n': WordType.noun, 'ns': WordType.location_name,
+                        'c': WordType.conjunction, 't': WordType.time, 'nr': WordType.personname,
+                        'nr1': WordType.personname, 'nr2': WordType.personname,'nt':WordType.noun}
 
 def jieba_converter(clistvalue):
     if clistvalue in _jieba_to_buildin_dic:
