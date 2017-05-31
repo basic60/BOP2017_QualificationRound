@@ -75,12 +75,11 @@ def test_process(ifile, debug=True):
         my_list.append(val)
         ofs.write(str(val) + '\n')
 
-        if limit>500:
-            break
+        # if limit>500:
+        #    break
 
     check()
     print("\033[1;31;0mTotal " + str(ac_num) + " correct answers.\n" + "The accuracy rate is " + str(ac_num / tot_num))
-
 
 # 输出答案
 def oj(ifile, opath='d:\zzh\output.txt'):
@@ -184,14 +183,11 @@ if __name__ == '__main__':
     # =============================================================================
 
     # =======================单进程测试，输出文件为output.txt========================
-    ifs = open('test.txt', 'r', encoding='UTF-8')
+    ifs = open('dev.txt', 'r', encoding='UTF-8')
     jieba.load_userdict('dic.txt')
     test_process(ifs,debug=True)
     ifs.close()
     # ==============================================================================
 
-    # t=jieba.posseg.cut('。[1]')
-    # for i in t:
-    #  print(i)
     end=time.time()
     print("Executing time: %f secs" % (end - start))  # 输出运行时间
